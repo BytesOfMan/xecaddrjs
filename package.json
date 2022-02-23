@@ -1,8 +1,8 @@
 {
-  "name": "bchaddrjs",
-  "version": "0.5.2",
-  "description": "Bitcoin Cash general purpose address translation.",
-  "main": "src/bchaddr.js",
+  "name": "xecaddrjs",
+  "version": "0.0.1",
+  "description": "eCash general purpose address translation.",
+  "main": "src/xecaddr.js",
   "scripts": {
     "clean": "shx rm -rf dist/ docs/",
     "build": "webpack",
@@ -10,7 +10,7 @@
     "pretest": "yarn lint",
     "test": "nyc --reporter=html --reporter=text mocha",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "docs": "jsdoc src/bchaddr.js --destination docs",
+    "docs": "jsdoc src/xecaddr.js --destination docs",
     "readme": "mustache package.json README.tpl.md > README.md"
   },
   "engines": {
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ealmansi/bchaddrjs.git"
+    "url": "git+ssh://git@github.com/bytesofman/xecaddrjs.git"
   },
   "keywords": [
     "bitcoin-cash",
@@ -32,12 +32,12 @@
     "bitpay",
     "cash-address"
   ],
-  "author": "Emilio Almansi <hi@ealmansi.com>",
+  "author": "bytesofman <joey@bitcoinabc.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ealmansi/bchaddrjs/issues"
+    "url": "https://github.com/bytesofman/xecaddrjs/issues"
   },
-  "homepage": "https://github.com/ealmansi/bchaddrjs#readme",
+  "homepage": "https://github.com/bytesofman/xecaddrjs#readme",
   "devDependencies": {
     "@babel/cli": "7.12.10",
     "@babel/core": "7.12.10",
@@ -58,7 +58,7 @@
   "dependencies": {
     "bs58check": "2.1.2",
     "buffer": "^6.0.3",
-    "cashaddrjs": "0.4.4",
+    "ecashaddrjs": "^1.0.7",
     "stream-browserify": "^3.0.0"
   }
 }

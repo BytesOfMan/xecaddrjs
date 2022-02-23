@@ -6,28 +6,28 @@
  * file LICENSE or http://www.opensource.org/licenses/mit-license.php.
  */
 
-var assert = require('chai').assert
-var bchaddr = require('..')
+const assert = require('chai').assert
+const bchaddr = require('..')
 
 describe('Readme examples', function () {
   it('should work exactly as advertised', function () {
-    var Format = bchaddr.Format
-    var Network = bchaddr.Network
-    var Type = bchaddr.Type
-    var isValidAddress = bchaddr.isValidAddress
-    var isLegacyAddress = bchaddr.isLegacyAddress
-    var isBitpayAddress = bchaddr.isBitpayAddress
-    var isCashAddress = bchaddr.isCashAddress
-    var isMainnetAddress = bchaddr.isMainnetAddress
-    var isTestnetAddress = bchaddr.isTestnetAddress
-    var isP2PKHAddress = bchaddr.isP2PKHAddress
-    var isP2SHAddress = bchaddr.isP2SHAddress
-    var detectAddressFormat = bchaddr.detectAddressFormat
-    var detectAddressNetwork = bchaddr.detectAddressNetwork
-    var detectAddressType = bchaddr.detectAddressType
-    var toLegacyAddress = bchaddr.toLegacyAddress
-    var toBitpayAddress = bchaddr.toBitpayAddress
-    var toCashAddress = bchaddr.toCashAddress
+    const Format = bchaddr.Format
+    const Network = bchaddr.Network
+    const Type = bchaddr.Type
+    const isValidAddress = bchaddr.isValidAddress
+    const isLegacyAddress = bchaddr.isLegacyAddress
+    const isBitpayAddress = bchaddr.isBitpayAddress
+    const isCashAddress = bchaddr.isCashAddress
+    const isMainnetAddress = bchaddr.isMainnetAddress
+    const isTestnetAddress = bchaddr.isTestnetAddress
+    const isP2PKHAddress = bchaddr.isP2PKHAddress
+    const isP2SHAddress = bchaddr.isP2SHAddress
+    const detectAddressFormat = bchaddr.detectAddressFormat
+    const detectAddressNetwork = bchaddr.detectAddressNetwork
+    const detectAddressType = bchaddr.detectAddressType
+    const toLegacyAddress = bchaddr.toLegacyAddress
+    const toBitpayAddress = bchaddr.toBitpayAddress
+    const toCashAddress = bchaddr.toCashAddress
     assert.strictEqual(
       isValidAddress(null),
       false

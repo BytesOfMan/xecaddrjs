@@ -1,19 +1,19 @@
-const path = require('path');
-const pkg = require('./package.json');
+const path = require('path')
+const pkg = require('./package.json')
 
 const base = {
   mode: 'production',
-  entry: path.resolve(__dirname, 'src', 'bchaddr.js'),
+  entry: path.resolve(__dirname, 'src', 'xecaddr.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    library: 'bchaddr',
+    library: 'xecaddr',
     libraryTarget: 'umd',
-    globalObject: 'this',
+    globalObject: 'this'
   },
   resolve: {
     fallback: {
-      stream: require.resolve('stream-browserify'),
-    },
+      stream: require.resolve('stream-browserify')
+    }
   },
   module: {
     rules: [
@@ -31,20 +31,20 @@ const base = {
       }
     ]
   }
-};
+}
 
 module.exports = [
   Object.assign({}, base, {
     output: Object.assign({}, base.output, {
-      filename: 'bchaddrjs-' + pkg.version + '.js',
+      filename: 'xecaddrjs-' + pkg.version + '.js'
     }),
     optimization: {
-      minimize: false,
-    },
+      minimize: false
+    }
   }),
   Object.assign({}, base, {
     output: Object.assign({}, base.output, {
-      filename: 'bchaddrjs-' + pkg.version + '.min.js',
-    }),
-  }),
-];
+      filename: 'xecaddrjs-' + pkg.version + '.min.js'
+    })
+  })
+]

@@ -1,16 +1,16 @@
 /***
  * @license
- * https://github.com/ealmansi/bchaddrjs
+ * https://github.com/ealmansi/xecaddrjs
  * Copyright (c) 2018-2020 Emilio Almansi
  * Distributed under the MIT software license, see the accompanying
  * file LICENSE or http://www.opensource.org/licenses/mit-license.php.
  */
 
-var assert = require('chai').assert
-var bchaddr = require('..')
+const assert = require('chai').assert
+const xecaddr = require('..')
 
-describe('bchaddr', function () {
-  var LEGACY_MAINNET_P2PKH_ADDRESSES = [
+describe('xecaddr', function () {
+  const LEGACY_MAINNET_P2PKH_ADDRESSES = [
     '1B9UNtBfkkpgt8kVbwLN9ktE62QKnMbDzR',
     '185K5yAfcrARrHjNVt4iAUHtkYqcogF4km',
     '1EUrmffDt4SQQkGVfmDTyFcp57PuByeadW',
@@ -33,7 +33,7 @@ describe('bchaddr', function () {
     '1D8zGeRj3Vkns6VwKxwNoW2mDsxF25w2Zy'
   ]
 
-  var LEGACY_MAINNET_P2SH_ADDRESSES = [
+  const LEGACY_MAINNET_P2SH_ADDRESSES = [
     '3BqVJRg7Jf94yJSvj2zxaPFAEYh3MAyyw9',
     '38mL1Wf7AkUowTRocyjJb6epu58LSafEYf',
     '3FAshD9fRxknVuxvnrt4PsykDdgckmK7xD',
@@ -56,7 +56,7 @@ describe('bchaddr', function () {
     '3Dq1CBvAbQ5AxGCNT4byE8PhNQExZcR6Q2'
   ]
 
-  var LEGACY_TESTNET_P2PKH_ADDRESSES = [
+  const LEGACY_TESTNET_P2PKH_ADDRESSES = [
     'mqfRfwGeZnFwfFE7KWJjyg6Yx212iGi6Fi',
     'mnbGP2FeRsbgdQCzDT35zPWDcYSKm4wrcg',
     'mtzp4ikCh5sfBrk7PLBqoAq8w6zc48PsGn',
@@ -79,7 +79,7 @@ describe('bchaddr', function () {
     'msewZhWhrXC3eCyZ3XukdRF65sYwtbmARy'
   ]
 
-  var LEGACY_TESTNET_P2SH_ADDRESSES = [
+  const LEGACY_TESTNET_P2SH_ADDRESSES = [
     '2N3PhNAc8v7eRB65UQAcqCLERStuD93JXLD',
     '2MzKY5Fb8nCzA9F4MJ7MBD3e67RLWFE1ciP',
     '2N6j5kx5h3RG8hhbUTzVw1py1RytnZNYoXo',
@@ -102,7 +102,7 @@ describe('bchaddr', function () {
     '2N5PDFvrCCraXA3pv8CDqr5NxakT8KJb3Gg'
   ]
 
-  var BITPAY_MAINNET_P2PKH_ADDRESSES = [
+  const BITPAY_MAINNET_P2PKH_ADDRESSES = [
     'CScMwvXjdooDnGevHgfHjGWFi9cjk75Aaj',
     'CPYCf1WjVu8xkRdoBdPdjyuvNg42oA7g3o',
     'CVwkLi1Hm7QwJtAvMWYPYmEqhEcK4KW3my',
@@ -125,7 +125,7 @@ describe('bchaddr', function () {
     'CUbsqgmnvYjKmEQN1iGJP1enr1Aet3jrNW'
   ]
 
-  var BITPAY_MAINNET_P2SH_ADDRESSES = [
+  const BITPAY_MAINNET_P2SH_ADDRESSES = [
     'HGfbmE7C9yMjbUKxaif7YmmhGCi4FN8hzH',
     'HDbSUK6C24hUZdJqUfPTZVBMvj9MGEzYSY',
     'HKzzA1akHGyT85qxeYYDNGWHFHhddvQabB',
@@ -148,7 +148,7 @@ describe('bchaddr', function () {
     'HJf7ezMFSiHqaS5QJkG8CWvEQ4FyTTnjMB'
   ]
 
-  var BITPAY_TESTNET_P2PKH_ADDRESSES = [
+  const BITPAY_TESTNET_P2PKH_ADDRESSES = [
     'mqfRfwGeZnFwfFE7KWJjyg6Yx212iGi6Fi',
     'mnbGP2FeRsbgdQCzDT35zPWDcYSKm4wrcg',
     'mtzp4ikCh5sfBrk7PLBqoAq8w6zc48PsGn',
@@ -171,7 +171,7 @@ describe('bchaddr', function () {
     'msewZhWhrXC3eCyZ3XukdRF65sYwtbmARy'
   ]
 
-  var BITPAY_TESTNET_P2SH_ADDRESSES = [
+  const BITPAY_TESTNET_P2SH_ADDRESSES = [
     '2N3PhNAc8v7eRB65UQAcqCLERStuD93JXLD',
     '2MzKY5Fb8nCzA9F4MJ7MBD3e67RLWFE1ciP',
     '2N6j5kx5h3RG8hhbUTzVw1py1RytnZNYoXo',
@@ -194,7 +194,7 @@ describe('bchaddr', function () {
     '2N5PDFvrCCraXA3pv8CDqr5NxakT8KJb3Gg'
   ]
 
-  var CASHADDR_MAINNET_P2PKH_ADDRESSES = [
+  const CASHADDR_MAINNET_P2PKH_ADDRESSES = [
     'bitcoincash:qph5kuz78czq00e3t85ugpgd7xmer5kr7c5f6jdpwk',
     'bitcoincash:qpxenfpcf975gxdjmq9pk3xm6hjmfj6re56t60smsm',
     'bitcoincash:qzfau6vrq980qntgp5e7l6cpfsf7jw88c5u7y85qx6',
@@ -217,7 +217,7 @@ describe('bchaddr', function () {
     'bitcoincash:qzzjgw37vwls805c9fw6g9vqyupadst6wgmane0s4l'
   ]
 
-  var CASHADDR_MAINNET_P2SH_ADDRESSES = [
+  const CASHADDR_MAINNET_P2SH_ADDRESSES = [
     'bitcoincash:pph5kuz78czq00e3t85ugpgd7xmer5kr7crv8a2z4t',
     'bitcoincash:ppxenfpcf975gxdjmq9pk3xm6hjmfj6re5dw8qhctx',
     'bitcoincash:pzfau6vrq980qntgp5e7l6cpfsf7jw88c5tmegnra8',
@@ -240,7 +240,7 @@ describe('bchaddr', function () {
     'bitcoincash:pzzjgw37vwls805c9fw6g9vqyupadst6wgvcwkgnwz'
   ]
 
-  var CASHADDR_TESTNET_P2PKH_ADDRESSES = [
+  const CASHADDR_TESTNET_P2PKH_ADDRESSES = [
     'bchtest:qph5kuz78czq00e3t85ugpgd7xmer5kr7csm740kf2',
     'bchtest:qpxenfpcf975gxdjmq9pk3xm6hjmfj6re57e7gjvh8',
     'bchtest:qzfau6vrq980qntgp5e7l6cpfsf7jw88c5cvqqkhpx',
@@ -263,7 +263,7 @@ describe('bchaddr', function () {
     'bchtest:qzzjgw37vwls805c9fw6g9vqyupadst6wgl0h7d8jr'
   ]
 
-  var CASHADDR_TESTNET_P2SH_ADDRESSES = [
+  const CASHADDR_TESTNET_P2SH_ADDRESSES = [
     'bchtest:pph5kuz78czq00e3t85ugpgd7xmer5kr7c87r6g4jh',
     'bchtest:ppxenfpcf975gxdjmq9pk3xm6hjmfj6re5fur840v6',
     'bchtest:pzfau6vrq980qntgp5e7l6cpfsf7jw88c50fa0356m',
@@ -286,73 +286,185 @@ describe('bchaddr', function () {
     'bchtest:pzzjgw37vwls805c9fw6g9vqyupadst6wgg2232yf7'
   ]
 
-  var LEGACY_ADDRESSES = flatten([
+  const XECADDR_MAINNET_P2PKH_ADDRESSES = [
+    'ecash:qph5kuz78czq00e3t85ugpgd7xmer5kr7cdywekmgp',
+    'ecash:qpxenfpcf975gxdjmq9pk3xm6hjmfj6re5rxwytpkv',
+    'ecash:qzfau6vrq980qntgp5e7l6cpfsf7jw88c59nsv06qd',
+    'ecash:qzcguejjfxld867ck4zudc9a6y8mf6ftgqewjfjpeq',
+    'ecash:qqm2lpqdfjsg8kkhwk0a3e3gypyswkd69u67sw7gcc',
+    'ecash:qrccfa4qm3xfcrta78v7du75jjaww0ylnsfe8dt7r8',
+    'ecash:qqdcsl6c879esyxyacmz7g6vtzwjjwtzns4hqdpc44',
+    'ecash:qpr2ddwe8qnnh8h20mmn4zgrharmy0vuy5acugujea',
+    'ecash:qqymsmh0nhfhs9k5whhnjwfxyaumvtxm8gn0mmwnrn',
+    'ecash:qzwdmm83qjx7372wxgszaukan73ffn8ct5vpwutttg',
+    'ecash:qzh3f9me5z5sn2w8euap2gyrp6kr7gf6mydkrez7u8',
+    'ecash:qrneuckcx69clprn4nnr82tf8sycqrs3acvxhvqau7',
+    'ecash:qz742xef07g9w8q52mx0q6m9hp05hnzm658r5x5zla',
+    'ecash:qq5dzl0drx8v0layyyuh5aupvxfs80ydmscep7wspc',
+    'ecash:qpxedxtug7kpwd6tgf5vx08gjamel7sldspcmsargs',
+    'ecash:qr4fs2m8tjmw54r2aqmadggzuagttkujgy6lylkyuj',
+    'ecash:qrmed4fxlhkgay9nxw7zn9muew5ktkyjnu9s68lzyw',
+    'ecash:qqv3cpvmu4h0vqa6aly0urec7kwtuhe49ymhd47svm',
+    'ecash:qr39scfteeu5l573lzerchh6wc4cqkxetu6safjvsj',
+    'ecash:qzzjgw37vwls805c9fw6g9vqyupadst6wgzs8j52ng'
+  ]
+
+  const XECADDR_MAINNET_P2SH_ADDRESSES = [
+    'ecash:pph5kuz78czq00e3t85ugpgd7xmer5kr7c6pnk3cnu',
+    'ecash:ppxenfpcf975gxdjmq9pk3xm6hjmfj6re55rntvzd3',
+    'ecash:pzfau6vrq980qntgp5e7l6cpfsf7jw88c5jkdrgems',
+    'ecash:pzcguejjfxld867ck4zudc9a6y8mf6ftgqwt0x4zza',
+    'ecash:pqm2lpqdfjsg8kkhwk0a3e3gypyswkd69udmdpetr9',
+    'ecash:prccfa4qm3xfcrta78v7du75jjaww0ylns7u6zvac6',
+    'ecash:pqdcsl6c879esyxyacmz7g6vtzwjjwtznszjazxmwg',
+    'ecash:ppr2ddwe8qnnh8h20mmn4zgrharmy0vuy52ap8m3zq',
+    'ecash:pqymsmh0nhfhs9k5whhnjwfxyaumvtxm8gy2x5fscw',
+    'ecash:pzwdmm83qjx7372wxgszaukan73ffn8ct5mynnvgs4',
+    'ecash:pzh3f9me5z5sn2w8euap2gyrp6kr7gf6my6n7k9a86',
+    'ecash:prneuckcx69clprn4nnr82tf8sycqrs3acmr2r878r',
+    'ecash:pz742xef07g9w8q52mx0q6m9hp05hnzm65sxffnpyq',
+    'ecash:pq5dzl0drx8v0layyyuh5aupvxfs80ydms0uu3fn69',
+    'ecash:ppxedxtug7kpwd6tgf5vx08gjamel7sldskaxl6qnd',
+    'ecash:pr4fs2m8tjmw54r2aqmadggzuagttkujgyd6es3880',
+    'ecash:prmed4fxlhkgay9nxw7zn9muew5ktkyjnuj48gcpln',
+    'ecash:pqv3cpvmu4h0vqa6aly0urec7kwtuhe49yvjs6enhx',
+    'ecash:pr39scfteeu5l573lzerchh6wc4cqkxetud4qx40t0',
+    'ecash:pzzjgw37vwls805c9fw6g9vqyupadst6wg446anfg4'
+  ]
+
+  const XECADDR_TESTNET_P2PKH_ADDRESSES = [
+    'ectest:qph5kuz78czq00e3t85ugpgd7xmer5kr7ct0se3kts',
+    'ectest:qpxenfpcf975gxdjmq9pk3xm6hjmfj6re59dsyvv4a',
+    'ectest:qzfau6vrq980qntgp5e7l6cpfsf7jw88c5rcwvghru',
+    'ectest:qzcguejjfxld867ck4zudc9a6y8mf6ftgql9vf4v63',
+    'ectest:qqm2lpqdfjsg8kkhwk0a3e3gypyswkd69uu4wwe9mf',
+    'ectest:qrccfa4qm3xfcrta78v7du75jjaww0ylns0jedvnqk',
+    'ectest:qqdcsl6c879esyxyacmz7g6vtzwjjwtznsnu7dx4ky',
+    'ectest:qpr2ddwe8qnnh8h20mmn4zgrharmy0vuy5mnzgml6v',
+    'ectest:qqymsmh0nhfhs9k5whhnjwfxyaumvtxm8g4y9mf7qz',
+    'ectest:qzwdmm83qjx7372wxgszaukan73ffn8ct522suvxge',
+    'ectest:qzh3f9me5z5sn2w8euap2gyrp6kr7gf6mytaae9nlk',
+    'ectest:qrneuckcx69clprn4nnr82tf8sycqrs3ac2dfv8sl0',
+    'ectest:qz742xef07g9w8q52mx0q6m9hp05hnzm65pg2xn0uv',
+    'ectest:qq5dzl0drx8v0layyyuh5aupvxfs80ydms7jl7fazf',
+    'ectest:qpxedxtug7kpwd6tgf5vx08gjamel7slds8n9s6wtp',
+    'ectest:qr4fs2m8tjmw54r2aqmadggzuagttkujgyu56l3flr',
+    'ectest:qrmed4fxlhkgay9nxw7zn9muew5ktkyjnurmy8c08l',
+    'ectest:qqv3cpvmu4h0vqa6aly0urec7kwtuhe49yaun4ea02',
+    'ectest:qr39scfteeu5l573lzerchh6wc4cqkxetuumrf4pnr',
+    'ectest:qzzjgw37vwls805c9fw6g9vqyupadst6wgymejn8se'
+  ]
+
+  const XECADDR_TESTNET_P2SH_ADDRESSES = [
+    'ectest:pph5kuz78czq00e3t85ugpgd7xmer5kr7cu2dkk4sd',
+    'ectest:ppxenfpcf975gxdjmq9pk3xm6hjmfj6re5jgdtt0wq',
+    'ectest:pzfau6vrq980qntgp5e7l6cpfsf7jw88c55anr05cp',
+    'ectest:pzcguejjfxld867ck4zudc9a6y8mf6ftgqgq3xj0pv',
+    'ectest:pqm2lpqdfjsg8kkhwk0a3e3gypyswkd69utsnp7xq5',
+    'ectest:prccfa4qm3xfcrta78v7du75jjaww0ylnschyztsmt',
+    'ectest:pqdcsl6c879esyxyacmz7g6vtzwjjwtznsyerzpkde',
+    'ectest:ppr2ddwe8qnnh8h20mmn4zgrharmy0vuy5vkl8uup3',
+    'ectest:pqymsmh0nhfhs9k5whhnjwfxyaumvtxm8gzpc5waml',
+    'ectest:pzwdmm83qjx7372wxgszaukan73ffn8ct5a0dnt9ny',
+    'ectest:pzh3f9me5z5sn2w8euap2gyrp6kr7gf6myucqkzsyt',
+    'ectest:prneuckcx69clprn4nnr82tf8sycqrs3acag5rqnyj',
+    'ectest:pz742xef07g9w8q52mx0q6m9hp05hnzm65kdhf5v83',
+    'ectest:pq5dzl0drx8v0layyyuh5aupvxfs80ydmsfhz3w7e5',
+    'ectest:ppxedxtug7kpwd6tgf5vx08gjamel7sldsskcladsu',
+    'ectest:pr4fs2m8tjmw54r2aqmadggzuagttkujgyt38sk2y7',
+    'ectest:prmed4fxlhkgay9nxw7zn9muew5ktkyjnu57eglvuz',
+    'ectest:pqv3cpvmu4h0vqa6aly0urec7kwtuhe49y2ew6775h',
+    'ectest:pr39scfteeu5l573lzerchh6wc4cqkxetut77xjzg7',
+    'ectest:pzzjgw37vwls805c9fw6g9vqyupadst6wgn7ya5yty'
+  ]
+
+  const LEGACY_ADDRESSES = flatten([
     LEGACY_MAINNET_P2PKH_ADDRESSES,
     LEGACY_MAINNET_P2SH_ADDRESSES,
     LEGACY_TESTNET_P2PKH_ADDRESSES,
     LEGACY_TESTNET_P2SH_ADDRESSES
   ])
 
-  var BITPAY_MAINNET_ADDRESSES = flatten([
+  const BITPAY_MAINNET_ADDRESSES = flatten([
     BITPAY_MAINNET_P2PKH_ADDRESSES,
     BITPAY_MAINNET_P2SH_ADDRESSES
   ])
 
-  var BITPAY_ADDRESSES = flatten([
+  const BITPAY_ADDRESSES = flatten([
     BITPAY_MAINNET_ADDRESSES,
     BITPAY_TESTNET_P2PKH_ADDRESSES,
     BITPAY_TESTNET_P2SH_ADDRESSES
   ])
 
-  var CASHADDR_ADDRESSES = flatten([
+  const CASHADDR_ADDRESSES = flatten([
     CASHADDR_MAINNET_P2PKH_ADDRESSES,
     CASHADDR_MAINNET_P2SH_ADDRESSES,
     CASHADDR_TESTNET_P2PKH_ADDRESSES,
     CASHADDR_TESTNET_P2SH_ADDRESSES
   ])
 
-  var CASHADDR_ADDRESSES_NO_PREFIX = CASHADDR_ADDRESSES.map(function (address) {
-    var parts = address.split(':')
+  const CASHADDR_ADDRESSES_NO_PREFIX = CASHADDR_ADDRESSES.map(function (address) {
+    const parts = address.split(':')
     return parts[1]
   })
 
-  var MAINNET_ADDRESSES = flatten([
+  const XECADDR_ADDRESSES = flatten([
+    XECADDR_MAINNET_P2PKH_ADDRESSES,
+    XECADDR_MAINNET_P2SH_ADDRESSES,
+    XECADDR_TESTNET_P2PKH_ADDRESSES,
+    XECADDR_TESTNET_P2SH_ADDRESSES
+  ])
+
+  const XECADDR_ADDRESSES_NO_PREFIX = XECADDR_ADDRESSES.map(function (address) {
+    const parts = address.split(':')
+    return parts[1]
+  })
+
+  const MAINNET_ADDRESSES = flatten([
     LEGACY_MAINNET_P2PKH_ADDRESSES,
     LEGACY_MAINNET_P2SH_ADDRESSES,
     BITPAY_MAINNET_P2PKH_ADDRESSES,
     BITPAY_MAINNET_P2SH_ADDRESSES,
     CASHADDR_MAINNET_P2PKH_ADDRESSES,
-    CASHADDR_MAINNET_P2SH_ADDRESSES
+    CASHADDR_MAINNET_P2SH_ADDRESSES,
+    XECADDR_MAINNET_P2PKH_ADDRESSES,
+    XECADDR_MAINNET_P2SH_ADDRESSES
   ])
 
-  var TESTNET_ADDRESSES = flatten([
+  const TESTNET_ADDRESSES = flatten([
     LEGACY_TESTNET_P2PKH_ADDRESSES,
     LEGACY_TESTNET_P2SH_ADDRESSES,
     BITPAY_TESTNET_P2PKH_ADDRESSES,
     BITPAY_TESTNET_P2SH_ADDRESSES,
     CASHADDR_TESTNET_P2PKH_ADDRESSES,
-    CASHADDR_TESTNET_P2SH_ADDRESSES
+    CASHADDR_TESTNET_P2SH_ADDRESSES,
+    XECADDR_TESTNET_P2PKH_ADDRESSES,
+    XECADDR_TESTNET_P2SH_ADDRESSES
   ])
 
-  var P2PKH_ADDRESSES = flatten([
+  const P2PKH_ADDRESSES = flatten([
     LEGACY_MAINNET_P2PKH_ADDRESSES,
     LEGACY_TESTNET_P2PKH_ADDRESSES,
     BITPAY_MAINNET_P2PKH_ADDRESSES,
     BITPAY_TESTNET_P2PKH_ADDRESSES,
     CASHADDR_MAINNET_P2PKH_ADDRESSES,
-    CASHADDR_TESTNET_P2PKH_ADDRESSES
+    CASHADDR_TESTNET_P2PKH_ADDRESSES,
+    XECADDR_MAINNET_P2PKH_ADDRESSES,
+    XECADDR_TESTNET_P2PKH_ADDRESSES
   ])
 
-  var P2SH_ADDRESSES = flatten([
+  const P2SH_ADDRESSES = flatten([
     LEGACY_MAINNET_P2SH_ADDRESSES,
     LEGACY_TESTNET_P2SH_ADDRESSES,
     BITPAY_MAINNET_P2SH_ADDRESSES,
     BITPAY_TESTNET_P2SH_ADDRESSES,
     CASHADDR_MAINNET_P2SH_ADDRESSES,
-    CASHADDR_TESTNET_P2SH_ADDRESSES
+    CASHADDR_TESTNET_P2SH_ADDRESSES,
+    XECADDR_MAINNET_P2SH_ADDRESSES,
+    XECADDR_TESTNET_P2SH_ADDRESSES
   ])
 
-  var BITCOIN_CASH_ADDRESSES = flatten([
+  const BITCOIN_CASH_ADDRESSES = flatten([
     MAINNET_ADDRESSES,
     TESTNET_ADDRESSES
   ])
@@ -363,19 +475,19 @@ describe('bchaddr', function () {
 
   describe('#isValidAddress()', function () {
     it('it should return false for invalid inputs', function () {
-      var INVALID_INPUTS = [
+      const INVALID_INPUTS = [
         undefined, null,
         {}, [],
         1, '',
         'some invalid address', 'st1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX'
       ]
       INVALID_INPUTS.forEach(function (address) {
-        assert.isFalse(bchaddr.isValidAddress(address))
+        assert.isFalse(xecaddr.isValidAddress(address))
       })
     })
     it('it should return true for any valid Bitcoin Cash address', function () {
       BITCOIN_CASH_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isValidAddress(address))
+        assert.isTrue(xecaddr.isValidAddress(address))
       })
     })
   })
@@ -383,28 +495,33 @@ describe('bchaddr', function () {
   describe('#detectAddressFormat()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.detectAddressFormat()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressFormat()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressFormat('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressFormat('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressFormat('st1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressFormat('st1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
-    it('it should detect a legacy address\' format correctly', function () {
+    it('it should detect a legacy address format correctly', function () {
       LEGACY_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressFormat(address), bchaddr.Format.Legacy)
+        assert.strictEqual(xecaddr.detectAddressFormat(address), xecaddr.Format.Legacy)
       })
     })
-    it('it should detect a bitpay address\' format correctly', function () {
+    it('it should detect a bitpay address format correctly', function () {
       BITPAY_MAINNET_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressFormat(address), bchaddr.Format.Bitpay)
+        assert.strictEqual(xecaddr.detectAddressFormat(address), xecaddr.Format.Bitpay)
       })
     })
-    it('it should detect a cashaddr address\' format correctly', function () {
+    it('it should detect a cashaddr address format correctly', function () {
       CASHADDR_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressFormat(address), bchaddr.Format.Cashaddr)
+        assert.strictEqual(xecaddr.detectAddressFormat(address), xecaddr.Format.Cashaddr)
+      })
+    })
+    it('it should detect an xecaddr address format correctly', function () {
+      XECADDR_ADDRESSES.forEach(function (address) {
+        assert.strictEqual(xecaddr.detectAddressFormat(address), xecaddr.Format.Xecaddr)
       })
     })
   })
@@ -412,23 +529,23 @@ describe('bchaddr', function () {
   describe('#detectAddressNetwork()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.detectAddressNetwork()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressNetwork()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressNetwork('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressNetwork('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressNetwork('t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressNetwork('t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('it should detect a mainnet address\' network correctly', function () {
       MAINNET_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressNetwork(address), bchaddr.Network.Mainnet)
+        assert.strictEqual(xecaddr.detectAddressNetwork(address), xecaddr.Network.Mainnet)
       })
     })
     it('it should detect a testnet address\' network correctly', function () {
       TESTNET_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressNetwork(address), bchaddr.Network.Testnet)
+        assert.strictEqual(xecaddr.detectAddressNetwork(address), xecaddr.Network.Testnet)
       })
     })
   })
@@ -436,23 +553,23 @@ describe('bchaddr', function () {
   describe('#detectAddressType()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.detectAddressType()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressType()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressType('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressType('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.detectAddressType('somt1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.detectAddressType('somt1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should detect a P2PKH address\' type correctly', function () {
       P2PKH_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressType(address), bchaddr.Type.P2PKH)
+        assert.strictEqual(xecaddr.detectAddressType(address), xecaddr.Type.P2PKH)
       })
     })
     it('should detect a P2SH address\' type correctly', function () {
       P2SH_ADDRESSES.forEach(function (address) {
-        assert.strictEqual(bchaddr.detectAddressType(address), bchaddr.Type.P2SH)
+        assert.strictEqual(xecaddr.detectAddressType(address), xecaddr.Type.P2SH)
       })
     })
   })
@@ -460,30 +577,36 @@ describe('bchaddr', function () {
   describe('#toLegacyAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.toLegacyAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toLegacyAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toLegacyAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toLegacyAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toLegacyAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toLegacyAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should translate legacy address format to itself correctly', function () {
       assert.deepEqual(
-        LEGACY_ADDRESSES.map(bchaddr.toLegacyAddress),
+        LEGACY_ADDRESSES.map(xecaddr.toLegacyAddress),
         LEGACY_ADDRESSES
       )
     })
     it('should translate bitpay address format to legacy format correctly', function () {
       assert.deepEqual(
-        BITPAY_ADDRESSES.map(bchaddr.toLegacyAddress),
+        BITPAY_ADDRESSES.map(xecaddr.toLegacyAddress),
         LEGACY_ADDRESSES
       )
     })
     it('should translate cashaddr address format to legacy format correctly', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES.map(bchaddr.toLegacyAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.toLegacyAddress),
+        LEGACY_ADDRESSES
+      )
+    })
+    it('should translate xecaddr address format to legacy format correctly', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES.map(xecaddr.toLegacyAddress),
         LEGACY_ADDRESSES
       )
     })
@@ -492,30 +615,30 @@ describe('bchaddr', function () {
   describe('#toBitpayAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.toBitpayAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toBitpayAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toBitpayAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toBitpayAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toBitpayAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toBitpayAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should translate legacy address format to bitpay format correctly', function () {
       assert.deepEqual(
-        LEGACY_ADDRESSES.map(bchaddr.toBitpayAddress),
+        LEGACY_ADDRESSES.map(xecaddr.toBitpayAddress),
         BITPAY_ADDRESSES
       )
     })
     it('should translate bitpay address format to itself correctly', function () {
       assert.deepEqual(
-        BITPAY_ADDRESSES.map(bchaddr.toBitpayAddress),
+        BITPAY_ADDRESSES.map(xecaddr.toBitpayAddress),
         BITPAY_ADDRESSES
       )
     })
     it('should translate cashaddr address format to bitpay format correctly', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES.map(bchaddr.toBitpayAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.toBitpayAddress),
         BITPAY_ADDRESSES
       )
     })
@@ -524,37 +647,99 @@ describe('bchaddr', function () {
   describe('#toCashAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.toCashAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toCashAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toCashAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toCashAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.toCashAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.toCashAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should translate legacy address format to cashaddr format correctly', function () {
       assert.deepEqual(
-        LEGACY_ADDRESSES.map(bchaddr.toCashAddress),
+        LEGACY_ADDRESSES.map(xecaddr.toCashAddress),
         CASHADDR_ADDRESSES
       )
     })
     it('should translate bitpay address format to cashaddr format correctly', function () {
       assert.deepEqual(
-        BITPAY_ADDRESSES.map(bchaddr.toCashAddress),
+        BITPAY_ADDRESSES.map(xecaddr.toCashAddress),
+        CASHADDR_ADDRESSES
+      )
+    })
+    it('should translate xecaddr address format to cashaddr correctly', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES.map(xecaddr.toCashAddress),
+        CASHADDR_ADDRESSES
+      )
+    })
+    it('should translate no-prefix xecaddr address to cashaddr', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toCashAddress),
         CASHADDR_ADDRESSES
       )
     })
     it('should translate cashaddr address format to itself correctly', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES.map(bchaddr.toCashAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.toCashAddress),
         CASHADDR_ADDRESSES
       )
     })
     it('should translate no-prefix cashaddr address format to itself correctly', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.toCashAddress),
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toCashAddress),
         CASHADDR_ADDRESSES
+      )
+    })
+  })
+
+  describe('#toXecAddress()', function () {
+    it('should fail when called with an invalid address', function () {
+      assert.throws(function () {
+        xecaddr.toXecAddress()
+      }, xecaddr.InvalidAddressError)
+      assert.throws(function () {
+        xecaddr.toXecAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
+      assert.throws(function () {
+        xecaddr.toXecAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
+    })
+    it('should translate legacy address format to xecaddr format correctly', function () {
+      assert.deepEqual(
+        LEGACY_ADDRESSES.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
+      )
+    })
+    it('should translate bitpay address format to xecaddr format correctly', function () {
+      assert.deepEqual(
+        BITPAY_ADDRESSES.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
+      )
+    })
+    it('should translate cashaddr address format to xecaddr correctly', function () {
+      assert.deepEqual(
+        CASHADDR_ADDRESSES.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
+      )
+    })
+    it('should translate no-prefix cashaddr address format to xecaddr', function () {
+      assert.deepEqual(
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
+      )
+    })
+    it('should translate xecaddr address format to itself correctly', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
+      )
+    })
+    it('should translate no-prefix xecaddr address format to itself correctly', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toXecAddress),
+        XECADDR_ADDRESSES
       )
     })
   })
@@ -562,28 +747,33 @@ describe('bchaddr', function () {
   describe('#isLegacyAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isLegacyAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isLegacyAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isLegacyAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isLegacyAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isLegacyAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isLegacyAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return true for a legacy address', function () {
       LEGACY_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isLegacyAddress(address))
+        assert.isTrue(xecaddr.isLegacyAddress(address))
       })
     })
     it('should return false for a bitpay address', function () {
       BITPAY_MAINNET_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isLegacyAddress(address))
+        assert.isFalse(xecaddr.isLegacyAddress(address))
       })
     })
     it('should return false for a cashaddr address', function () {
       CASHADDR_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isLegacyAddress(address))
+        assert.isFalse(xecaddr.isLegacyAddress(address))
+      })
+    })
+    it('should return false for an xecaddr address', function () {
+      XECADDR_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isLegacyAddress(address))
       })
     })
   })
@@ -591,28 +781,33 @@ describe('bchaddr', function () {
   describe('#isBitpayAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isBitpayAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isBitpayAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isBitpayAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isBitpayAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isBitpayAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isBitpayAddress('some t1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return false for a legacy address', function () {
       LEGACY_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isBitpayAddress(address))
+        assert.isFalse(xecaddr.isBitpayAddress(address))
       })
     })
     it('should return true for a bitpay address', function () {
       BITPAY_MAINNET_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isBitpayAddress(address))
+        assert.isTrue(xecaddr.isBitpayAddress(address))
       })
     })
     it('should return false for a cashaddr address', function () {
       CASHADDR_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isBitpayAddress(address))
+        assert.isFalse(xecaddr.isBitpayAddress(address))
+      })
+    })
+    it('should return false for an xecaddr address', function () {
+      XECADDR_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isBitpayAddress(address))
       })
     })
   })
@@ -620,28 +815,67 @@ describe('bchaddr', function () {
   describe('#isCashAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isCashAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isCashAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isCashAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isCashAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isCashAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isCashAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return false for a legacy address', function () {
       LEGACY_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isCashAddress(address))
+        assert.isFalse(xecaddr.isCashAddress(address))
       })
     })
     it('should return false for a bitpay address', function () {
       BITPAY_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isCashAddress(address))
+        assert.isFalse(xecaddr.isCashAddress(address))
+      })
+    })
+    it('should return false for an xecaddr address', function () {
+      XECADDR_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isCashAddress(address))
       })
     })
     it('should return true for a cashaddr address', function () {
       CASHADDR_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isCashAddress(address))
+        assert.isTrue(xecaddr.isCashAddress(address))
+      })
+    })
+  })
+
+  describe('#isXecAddress()', function () {
+    it('should fail when called with an invalid address', function () {
+      assert.throws(function () {
+        xecaddr.isXecAddress()
+      }, xecaddr.InvalidAddressError)
+      assert.throws(function () {
+        xecaddr.isXecAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
+      assert.throws(function () {
+        xecaddr.isXecAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
+    })
+    it('should return false for a legacy address', function () {
+      LEGACY_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isXecAddress(address))
+      })
+    })
+    it('should return false for a bitpay address', function () {
+      BITPAY_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isXecAddress(address))
+      })
+    })
+    it('should return false for a cashaddr address', function () {
+      CASHADDR_ADDRESSES.forEach(function (address) {
+        assert.isFalse(xecaddr.isXecAddress(address))
+      })
+    })
+    it('should return true for an xecaddr address', function () {
+      XECADDR_ADDRESSES.forEach(function (address) {
+        assert.isTrue(xecaddr.isXecAddress(address))
       })
     })
   })
@@ -649,23 +883,23 @@ describe('bchaddr', function () {
   describe('#isMainnetAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isMainnetAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isMainnetAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isMainnetAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isMainnetAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isMainnetAddress('somet1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isMainnetAddress('somet1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return true for a mainnet address', function () {
       MAINNET_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isMainnetAddress(address))
+        assert.isTrue(xecaddr.isMainnetAddress(address))
       })
     })
     it('should return false for a testnet address', function () {
       TESTNET_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isMainnetAddress(address))
+        assert.isFalse(xecaddr.isMainnetAddress(address))
       })
     })
   })
@@ -673,23 +907,23 @@ describe('bchaddr', function () {
   describe('#isTestnetAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isTestnetAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isTestnetAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isTestnetAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isTestnetAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isTestnetAddress('somet1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isTestnetAddress('somet1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return false for a mainnet address', function () {
       MAINNET_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isTestnetAddress(address))
+        assert.isFalse(xecaddr.isTestnetAddress(address))
       })
     })
     it('should return true for a testnet address', function () {
       TESTNET_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isTestnetAddress(address))
+        assert.isTrue(xecaddr.isTestnetAddress(address))
       })
     })
   })
@@ -697,23 +931,23 @@ describe('bchaddr', function () {
   describe('#isP2PKHAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isP2PKHAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2PKHAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isP2PKHAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2PKHAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isP2PKHAddress('some it1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2PKHAddress('some it1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return true for a P2PKH address', function () {
       P2PKH_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isP2PKHAddress(address))
+        assert.isTrue(xecaddr.isP2PKHAddress(address))
       })
     })
     it('should return false for a P2SH address', function () {
       P2SH_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isP2PKHAddress(address))
+        assert.isFalse(xecaddr.isP2PKHAddress(address))
       })
     })
   })
@@ -721,23 +955,23 @@ describe('bchaddr', function () {
   describe('#isP2SHAddress()', function () {
     it('should fail when called with an invalid address', function () {
       assert.throws(function () {
-        bchaddr.isP2SHAddress()
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2SHAddress()
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isP2SHAddress('some invalid address')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2SHAddress('some invalid address')
+      }, xecaddr.InvalidAddressError)
       assert.throws(function () {
-        bchaddr.isP2SHAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
-      }, bchaddr.InvalidAddressError)
+        xecaddr.isP2SHAddress('some int1LuPdPkGH5QoNSewQrr8EzNbM27ktPdgQX')
+      }, xecaddr.InvalidAddressError)
     })
     it('should return false for a P2PKH address', function () {
       P2PKH_ADDRESSES.forEach(function (address) {
-        assert.isFalse(bchaddr.isP2SHAddress(address))
+        assert.isFalse(xecaddr.isP2SHAddress(address))
       })
     })
     it('should return true for a P2SH address', function () {
       P2SH_ADDRESSES.forEach(function (address) {
-        assert.isTrue(bchaddr.isP2SHAddress(address))
+        assert.isTrue(xecaddr.isP2SHAddress(address))
       })
     })
   })
@@ -745,74 +979,149 @@ describe('bchaddr', function () {
   describe('cashaddr prefix detection', function () {
     it('should return the same result for detectAddressFormat', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.detectAddressFormat),
-        CASHADDR_ADDRESSES.map(bchaddr.detectAddressFormat)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressFormat),
+        CASHADDR_ADDRESSES.map(xecaddr.detectAddressFormat)
       )
     })
     it('should return the same result for detectAddressNetwork', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.detectAddressNetwork),
-        CASHADDR_ADDRESSES.map(bchaddr.detectAddressNetwork)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressNetwork),
+        CASHADDR_ADDRESSES.map(xecaddr.detectAddressNetwork)
       )
     })
     it('should return the same result for detectAddressType', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.detectAddressType),
-        CASHADDR_ADDRESSES.map(bchaddr.detectAddressType)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressType),
+        CASHADDR_ADDRESSES.map(xecaddr.detectAddressType)
       )
     })
     it('should return the same result for toLegacyAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.toLegacyAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.toLegacyAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toLegacyAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.toLegacyAddress)
       )
     })
     it('should return the same result for toBitpayAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.toBitpayAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.toBitpayAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toBitpayAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.toBitpayAddress)
       )
     })
     it('should return the same result for isLegacyAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isLegacyAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isLegacyAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isLegacyAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isLegacyAddress)
       )
     })
     it('should return the same result for isBitpayAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isBitpayAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isBitpayAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isBitpayAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isBitpayAddress)
       )
     })
     it('should return the same result for isCashAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isCashAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isCashAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isCashAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isCashAddress)
       )
     })
     it('should return the same result for isMainnetAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isMainnetAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isMainnetAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isMainnetAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isMainnetAddress)
       )
     })
     it('should return the same result for isTestnetAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isTestnetAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isTestnetAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isTestnetAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isTestnetAddress)
       )
     })
     it('should return the same result for isP2PKHAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isP2PKHAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isP2PKHAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isP2PKHAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isP2PKHAddress)
       )
     })
     it('should return the same result for isP2SHAddress', function () {
       assert.deepEqual(
-        CASHADDR_ADDRESSES_NO_PREFIX.map(bchaddr.isP2SHAddress),
-        CASHADDR_ADDRESSES.map(bchaddr.isP2SHAddress)
+        CASHADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isP2SHAddress),
+        CASHADDR_ADDRESSES.map(xecaddr.isP2SHAddress)
+      )
+    })
+  })
+
+  describe('xecaddr prefix detection', function () {
+    it('should return the same result for detectAddressFormat', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressFormat),
+        XECADDR_ADDRESSES.map(xecaddr.detectAddressFormat)
+      )
+    })
+    it('should return the same result for detectAddressNetwork', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressNetwork),
+        XECADDR_ADDRESSES.map(xecaddr.detectAddressNetwork)
+      )
+    })
+    it('should return the same result for detectAddressType', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.detectAddressType),
+        XECADDR_ADDRESSES.map(xecaddr.detectAddressType)
+      )
+    })
+    it('should return the same result for toLegacyAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toLegacyAddress),
+        XECADDR_ADDRESSES.map(xecaddr.toLegacyAddress)
+      )
+    })
+    it('should return the same result for toBitpayAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.toBitpayAddress),
+        XECADDR_ADDRESSES.map(xecaddr.toBitpayAddress)
+      )
+    })
+    it('should return the same result for isLegacyAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isLegacyAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isLegacyAddress)
+      )
+    })
+    it('should return the same result for isBitpayAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isBitpayAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isBitpayAddress)
+      )
+    })
+    it('should return the same result for isCashAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isCashAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isCashAddress)
+      )
+    })
+    it('should return the same result for isMainnetAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isMainnetAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isMainnetAddress)
+      )
+    })
+    it('should return the same result for isTestnetAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isTestnetAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isTestnetAddress)
+      )
+    })
+    it('should return the same result for isP2PKHAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isP2PKHAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isP2PKHAddress)
+      )
+    })
+    it('should return the same result for isP2SHAddress', function () {
+      assert.deepEqual(
+        XECADDR_ADDRESSES_NO_PREFIX.map(xecaddr.isP2SHAddress),
+        XECADDR_ADDRESSES.map(xecaddr.isP2SHAddress)
       )
     })
   })
