@@ -1,32 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: bchaddr.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: bchaddr.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/***
+/***
  * @license
  * https://github.com/ealmansi/bchaddrjs
  * Copyright (c) 2018-2020 Emilio Almansi
@@ -34,36 +6,37 @@
  * file LICENSE or http://www.opensource.org/licenses/mit-license.php.
  */
 
-var bs58check = require('bs58check')
-var cashaddr = require('cashaddrjs')
-var Buffer = require('buffer/').Buffer
+const bs58check = require('bs58check')
+const cashaddr = require('ecashaddrjs')
+const Buffer = require('buffer/').Buffer
 
 /**
- * General purpose Bitcoin Cash address detection and translation.&lt;br />
- * Supports all major Bitcoin Cash address formats.&lt;br />
+ * General purpose Bitcoin Cash address detection and translation.<br />
+ * Supports all major Bitcoin Cash address formats.<br />
  * Currently:
- * &lt;ul>
- *    &lt;li> Legacy format &lt;/li>
- *    &lt;li> Bitpay format &lt;/li>
- *    &lt;li> Cashaddr format &lt;/li>
- * &lt;/ul>
- * @module bchaddr
+ * <ul>
+ *    <li> Legacy format </li>
+ *    <li> Bitpay format </li>
+ *    <li> Cashaddr format </li>
+ * </ul>
+ * @module xecaddr
  */
 
 /**
  * @static
  * Supported Bitcoin Cash address formats.
  */
-var Format = {}
+const Format = {}
 Format.Legacy = 'legacy'
 Format.Bitpay = 'bitpay'
 Format.Cashaddr = 'cashaddr'
+Format.Xecaddr = 'xecaddr'
 
 /**
  * @static
  * Supported networks.
  */
-var Network = {}
+const Network = {}
 Network.Mainnet = 'mainnet'
 Network.Testnet = 'testnet'
 
@@ -71,7 +44,7 @@ Network.Testnet = 'testnet'
  * @static
  * Supported address types.
  */
-var Type = {}
+const Type = {}
 Type.P2PKH = 'p2pkh'
 Type.P2SH = 'p2sh'
 
@@ -131,7 +104,7 @@ function detectAddressType (address) {
  * @throws {InvalidAddressError}
  */
 function toLegacyAddress (address) {
-  var decoded = decodeAddress(address)
+  const decoded = decodeAddress(address)
   if (decoded.format === Format.Legacy) {
     return address
   }
@@ -146,7 +119,7 @@ function toLegacyAddress (address) {
  * @throws {InvalidAddressError}
  */
 function toBitpayAddress (address) {
-  var decoded = decodeAddress(address)
+  const decoded = decodeAddress(address)
   if (decoded.format === Format.Bitpay) {
     return address
   }
@@ -161,15 +134,27 @@ function toBitpayAddress (address) {
  * @throws {InvalidAddressError}
  */
 function toCashAddress (address) {
-  var decoded = decodeAddress(address)
+  const decoded = decodeAddress(address)
   return encodeAsCashaddr(decoded)
+}
+
+/**
+ * Translates the given address into xecaddr format.
+ * @static
+ * @param {string} address - A valid Bitcoin Cash address in any format.
+ * @return {string}
+ * @throws {InvalidAddressError}
+ */
+function toXecAddress (address) {
+  const decoded = decodeAddress(address)
+  return encodeAsXecaddr(decoded)
 }
 
 /**
  * Version byte table for base58 formats.
  * @private
  */
-var VERSION_BYTE = {}
+const VERSION_BYTE = {}
 VERSION_BYTE[Format.Legacy] = {}
 VERSION_BYTE[Format.Legacy][Network.Mainnet] = {}
 VERSION_BYTE[Format.Legacy][Network.Mainnet][Type.P2PKH] = 0
@@ -198,6 +183,10 @@ function decodeAddress (address) {
   } catch (error) {
   }
   try {
+    return decodeXecAddress(address)
+  } catch (error) {
+  }
+  try {
     return decodeCashAddress(address)
   } catch (error) {
   }
@@ -209,7 +198,7 @@ function decodeAddress (address) {
  * the version byte plus 20 bytes for a RIPEMD-160 hash.
  * @private
  */
-var BASE_58_CHECK_PAYLOAD_LENGTH = 21
+const BASE_58_CHECK_PAYLOAD_LENGTH = 21
 
 /**
  * Attempts to decode the given address assuming it is a base58 address.
@@ -220,12 +209,12 @@ var BASE_58_CHECK_PAYLOAD_LENGTH = 21
  */
 function decodeBase58Address (address) {
   try {
-    var payload = bs58check.decode(address)
+    const payload = bs58check.decode(address)
     if (payload.length !== BASE_58_CHECK_PAYLOAD_LENGTH) {
       throw new InvalidAddressError()
     }
-    var versionByte = payload[0]
-    var hash = Array.prototype.slice.call(payload, 1)
+    const versionByte = payload[0]
+    const hash = Array.prototype.slice.call(payload, 1)
     switch (versionByte) {
       case VERSION_BYTE[Format.Legacy][Network.Mainnet][Type.P2PKH]:
         return {
@@ -289,11 +278,37 @@ function decodeCashAddress (address) {
     } catch (error) {
     }
   } else {
-    var prefixes = ['bitcoincash', 'bchtest', 'bchreg']
-    for (var i = 0; i &lt; prefixes.length; ++i) {
+    const prefixes = ['bitcoincash', 'bchtest', 'bchreg']
+    for (let i = 0; i < prefixes.length; ++i) {
       try {
-        var prefix = prefixes[i]
+        const prefix = prefixes[i]
         return decodeCashAddressWithPrefix(prefix + ':' + address)
+      } catch (error) {
+      }
+    }
+  }
+  throw new InvalidAddressError()
+}
+
+/**
+ * Attempts to decode the given address assuming it is a cashaddr address.
+ * @private
+ * @param {string} address - A valid Bitcoin Cash address in any format.
+ * @return {object}
+ * @throws {InvalidAddressError}
+ */
+function decodeXecAddress (address) {
+  if (address.indexOf(':') !== -1) {
+    try {
+      return decodeXecAddressWithPrefix(address)
+    } catch (error) {
+    }
+  } else {
+    const prefixes = ['ecash', 'ectest']
+    for (let i = 0; i < prefixes.length; ++i) {
+      try {
+        const prefix = prefixes[i]
+        return decodeXecAddressWithPrefix(prefix + ':' + address)
       } catch (error) {
       }
     }
@@ -310,9 +325,9 @@ function decodeCashAddress (address) {
  */
 function decodeCashAddressWithPrefix (address) {
   try {
-    var decoded = cashaddr.decode(address)
-    var hash = Array.prototype.slice.call(decoded.hash, 0)
-    var type = decoded.type === 'P2PKH' ? Type.P2PKH : Type.P2SH
+    const decoded = cashaddr.decode(address)
+    const hash = Array.prototype.slice.call(decoded.hash, 0)
+    const type = decoded.type === 'P2PKH' ? Type.P2PKH : Type.P2SH
     switch (decoded.prefix) {
       case 'bitcoincash':
         return {
@@ -336,14 +351,47 @@ function decodeCashAddressWithPrefix (address) {
 }
 
 /**
+ * Attempts to decode the given address assuming it is a cashaddr address with explicit prefix.
+ * @private
+ * @param {string} address - A valid eCash (XEC) address in any format.
+ * @return {object}
+ * @throws {InvalidAddressError}
+ */
+function decodeXecAddressWithPrefix (address) {
+  try {
+    const decoded = cashaddr.decode(address)
+    const hash = Array.prototype.slice.call(decoded.hash, 0)
+    const type = decoded.type === 'P2PKH' ? Type.P2PKH : Type.P2SH
+    switch (decoded.prefix) {
+      case 'ecash':
+        return {
+          hash: hash,
+          format: Format.Xecaddr,
+          network: Network.Mainnet,
+          type: type
+        }
+      case 'ectest':
+        return {
+          hash: hash,
+          format: Format.Xecaddr,
+          network: Network.Testnet,
+          type: type
+        }
+    }
+  } catch (error) {
+  }
+  throw new InvalidAddressError()
+}
+
+/**
  * Encodes the given decoded address into legacy format.
  * @private
  * @param {object} decoded
  * @returns {string}
  */
 function encodeAsLegacy (decoded) {
-  var versionByte = VERSION_BYTE[Format.Legacy][decoded.network][decoded.type]
-  var buffer = Buffer.alloc(1 + decoded.hash.length)
+  const versionByte = VERSION_BYTE[Format.Legacy][decoded.network][decoded.type]
+  const buffer = Buffer.alloc(1 + decoded.hash.length)
   buffer[0] = versionByte
   buffer.set(decoded.hash, 1)
   return bs58check.encode(buffer)
@@ -356,8 +404,8 @@ function encodeAsLegacy (decoded) {
  * @returns {string}
  */
 function encodeAsBitpay (decoded) {
-  var versionByte = VERSION_BYTE[Format.Bitpay][decoded.network][decoded.type]
-  var buffer = Buffer.alloc(1 + decoded.hash.length)
+  const versionByte = VERSION_BYTE[Format.Bitpay][decoded.network][decoded.type]
+  const buffer = Buffer.alloc(1 + decoded.hash.length)
   buffer[0] = versionByte
   buffer.set(decoded.hash, 1)
   return bs58check.encode(buffer)
@@ -370,9 +418,22 @@ function encodeAsBitpay (decoded) {
  * @returns {string}
  */
 function encodeAsCashaddr (decoded) {
-  var prefix = decoded.network === Network.Mainnet ? 'bitcoincash' : 'bchtest'
-  var type = decoded.type === Type.P2PKH ? 'P2PKH' : 'P2SH'
-  var hash = new Uint8Array(decoded.hash)
+  const prefix = decoded.network === Network.Mainnet ? 'bitcoincash' : 'bchtest'
+  const type = decoded.type === Type.P2PKH ? 'P2PKH' : 'P2SH'
+  const hash = new Uint8Array(decoded.hash)
+  return cashaddr.encode(prefix, type, hash)
+}
+
+/**
+ * Encodes the given decoded address into xecaddr format.
+ * @private
+ * @param {object} decoded
+ * @returns {string}
+ */
+function encodeAsXecaddr (decoded) {
+  const prefix = decoded.network === Network.Mainnet ? 'ecash' : 'ectest'
+  const type = decoded.type === Type.P2PKH ? 'P2PKH' : 'P2SH'
+  const hash = new Uint8Array(decoded.hash)
   return cashaddr.encode(prefix, type, hash)
 }
 
@@ -407,6 +468,17 @@ function isBitpayAddress (address) {
  */
 function isCashAddress (address) {
   return detectAddressFormat(address) === Format.Cashaddr
+}
+
+/**
+ * Returns a boolean indicating whether the address is in xecaddr format.
+ * @static
+ * @param {string} address - A valid XEC address in any format.
+ * @returns {boolean}
+ * @throws {InvalidAddressError}
+ */
+function isXecAddress (address) {
+  return detectAddressFormat(address) === Format.Xecaddr
 }
 
 /**
@@ -459,7 +531,7 @@ function isP2SHAddress (address) {
  * InvalidAddressError
  */
 function InvalidAddressError () {
-  var error = new Error()
+  const error = new Error()
   this.name = error.name = 'InvalidAddressError'
   this.message = error.message = 'Received an invalid Bitcoin Cash address as input.'
   this.stack = error.stack
@@ -478,35 +550,14 @@ module.exports = {
   toLegacyAddress: toLegacyAddress,
   toBitpayAddress: toBitpayAddress,
   toCashAddress: toCashAddress,
+  toXecAddress: toXecAddress,
   isLegacyAddress: isLegacyAddress,
   isBitpayAddress: isBitpayAddress,
   isCashAddress: isCashAddress,
+  isXecAddress: isXecAddress,
   isMainnetAddress: isMainnetAddress,
   isTestnetAddress: isTestnetAddress,
   isP2PKHAddress: isP2PKHAddress,
   isP2SHAddress: isP2SHAddress,
   InvalidAddressError: InvalidAddressError
 }
-</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bchaddr.html">bchaddr</a></li></ul><h3>Classes</h3><ul><li><a href="module-bchaddr-InvalidAddressError.html">InvalidAddressError</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Dec 26 2020 20:43:05 GMT+0100 (Central European Standard Time)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>

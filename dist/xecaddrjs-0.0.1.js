@@ -4,14 +4,14 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["bchaddr"] = factory();
+		exports["xecaddr"] = factory();
 	else
-		root["bchaddr"] = factory();
+		root["xecaddr"] = factory();
 })(this, function() {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 861:
+/***/ 410:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 /***
@@ -23,7 +23,7 @@ return /******/ (() => { // webpackBootstrap
  */
 var bs58check = __webpack_require__(334);
 
-var cashaddr = __webpack_require__(707);
+var cashaddr = __webpack_require__(221);
 
 var Buffer = __webpack_require__(764).Buffer;
 /**
@@ -35,7 +35,7 @@ var Buffer = __webpack_require__(764).Buffer;
  *    <li> Bitpay format </li>
  *    <li> Cashaddr format </li>
  * </ul>
- * @module bchaddr
+ * @module xecaddr
  */
 
 /**
@@ -48,6 +48,7 @@ var Format = {};
 Format.Legacy = 'legacy';
 Format.Bitpay = 'bitpay';
 Format.Cashaddr = 'cashaddr';
+Format.Xecaddr = 'xecaddr';
 /**
  * @static
  * Supported networks.
@@ -165,6 +166,19 @@ function toCashAddress(address) {
   return encodeAsCashaddr(decoded);
 }
 /**
+ * Translates the given address into xecaddr format.
+ * @static
+ * @param {string} address - A valid Bitcoin Cash address in any format.
+ * @return {string}
+ * @throws {InvalidAddressError}
+ */
+
+
+function toXecAddress(address) {
+  var decoded = decodeAddress(address);
+  return encodeAsXecaddr(decoded);
+}
+/**
  * Version byte table for base58 formats.
  * @private
  */
@@ -196,6 +210,10 @@ VERSION_BYTE[Format.Bitpay][Network.Testnet][Type.P2SH] = 196;
 function decodeAddress(address) {
   try {
     return decodeBase58Address(address);
+  } catch (error) {}
+
+  try {
+    return decodeXecAddress(address);
   } catch (error) {}
 
   try {
@@ -312,6 +330,33 @@ function decodeCashAddress(address) {
   throw new InvalidAddressError();
 }
 /**
+ * Attempts to decode the given address assuming it is a cashaddr address.
+ * @private
+ * @param {string} address - A valid Bitcoin Cash address in any format.
+ * @return {object}
+ * @throws {InvalidAddressError}
+ */
+
+
+function decodeXecAddress(address) {
+  if (address.indexOf(':') !== -1) {
+    try {
+      return decodeXecAddressWithPrefix(address);
+    } catch (error) {}
+  } else {
+    var prefixes = ['ecash', 'ectest'];
+
+    for (var i = 0; i < prefixes.length; ++i) {
+      try {
+        var prefix = prefixes[i];
+        return decodeXecAddressWithPrefix(prefix + ':' + address);
+      } catch (error) {}
+    }
+  }
+
+  throw new InvalidAddressError();
+}
+/**
  * Attempts to decode the given address assuming it is a cashaddr address with explicit prefix.
  * @private
  * @param {string} address - A valid Bitcoin Cash address in any format.
@@ -340,6 +385,42 @@ function decodeCashAddressWithPrefix(address) {
         return {
           hash: hash,
           format: Format.Cashaddr,
+          network: Network.Testnet,
+          type: type
+        };
+    }
+  } catch (error) {}
+
+  throw new InvalidAddressError();
+}
+/**
+ * Attempts to decode the given address assuming it is a cashaddr address with explicit prefix.
+ * @private
+ * @param {string} address - A valid eCash (XEC) address in any format.
+ * @return {object}
+ * @throws {InvalidAddressError}
+ */
+
+
+function decodeXecAddressWithPrefix(address) {
+  try {
+    var decoded = cashaddr.decode(address);
+    var hash = Array.prototype.slice.call(decoded.hash, 0);
+    var type = decoded.type === 'P2PKH' ? Type.P2PKH : Type.P2SH;
+
+    switch (decoded.prefix) {
+      case 'ecash':
+        return {
+          hash: hash,
+          format: Format.Xecaddr,
+          network: Network.Mainnet,
+          type: type
+        };
+
+      case 'ectest':
+        return {
+          hash: hash,
+          format: Format.Xecaddr,
           network: Network.Testnet,
           type: type
         };
@@ -393,6 +474,20 @@ function encodeAsCashaddr(decoded) {
   return cashaddr.encode(prefix, type, hash);
 }
 /**
+ * Encodes the given decoded address into xecaddr format.
+ * @private
+ * @param {object} decoded
+ * @returns {string}
+ */
+
+
+function encodeAsXecaddr(decoded) {
+  var prefix = decoded.network === Network.Mainnet ? 'ecash' : 'ectest';
+  var type = decoded.type === Type.P2PKH ? 'P2PKH' : 'P2SH';
+  var hash = new Uint8Array(decoded.hash);
+  return cashaddr.encode(prefix, type, hash);
+}
+/**
  * Returns a boolean indicating whether the address is in legacy format.
  * @static
  * @param {string} address - A valid Bitcoin Cash address in any format.
@@ -427,6 +522,18 @@ function isBitpayAddress(address) {
 
 function isCashAddress(address) {
   return detectAddressFormat(address) === Format.Cashaddr;
+}
+/**
+ * Returns a boolean indicating whether the address is in xecaddr format.
+ * @static
+ * @param {string} address - A valid XEC address in any format.
+ * @returns {boolean}
+ * @throws {InvalidAddressError}
+ */
+
+
+function isXecAddress(address) {
+  return detectAddressFormat(address) === Format.Xecaddr;
 }
 /**
  * Returns a boolean indicating whether the address is a mainnet address.
@@ -502,9 +609,11 @@ module.exports = {
   toLegacyAddress: toLegacyAddress,
   toBitpayAddress: toBitpayAddress,
   toCashAddress: toCashAddress,
+  toXecAddress: toXecAddress,
   isLegacyAddress: isLegacyAddress,
   isBitpayAddress: isBitpayAddress,
   isCashAddress: isCashAddress,
+  isXecAddress: isXecAddress,
   isMainnetAddress: isMainnetAddress,
   isTestnetAddress: isTestnetAddress,
   isP2PKHAddress: isP2PKHAddress,
@@ -4336,7 +4445,151 @@ function BufferBigIntNotDefined () {
 
 /***/ }),
 
-/***/ 653:
+/***/ 27:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var Buffer = __webpack_require__(509).Buffer
+var Transform = __webpack_require__(830).Transform
+var StringDecoder = __webpack_require__(553)/* .StringDecoder */ .s
+var inherits = __webpack_require__(717)
+
+function CipherBase (hashMode) {
+  Transform.call(this)
+  this.hashMode = typeof hashMode === 'string'
+  if (this.hashMode) {
+    this[hashMode] = this._finalOrDigest
+  } else {
+    this.final = this._finalOrDigest
+  }
+  if (this._final) {
+    this.__final = this._final
+    this._final = null
+  }
+  this._decoder = null
+  this._encoding = null
+}
+inherits(CipherBase, Transform)
+
+CipherBase.prototype.update = function (data, inputEnc, outputEnc) {
+  if (typeof data === 'string') {
+    data = Buffer.from(data, inputEnc)
+  }
+
+  var outData = this._update(data)
+  if (this.hashMode) return this
+
+  if (outputEnc) {
+    outData = this._toString(outData, outputEnc)
+  }
+
+  return outData
+}
+
+CipherBase.prototype.setAutoPadding = function () {}
+CipherBase.prototype.getAuthTag = function () {
+  throw new Error('trying to get auth tag in unsupported state')
+}
+
+CipherBase.prototype.setAuthTag = function () {
+  throw new Error('trying to set auth tag in unsupported state')
+}
+
+CipherBase.prototype.setAAD = function () {
+  throw new Error('trying to set aad in unsupported state')
+}
+
+CipherBase.prototype._transform = function (data, _, next) {
+  var err
+  try {
+    if (this.hashMode) {
+      this._update(data)
+    } else {
+      this.push(this._update(data))
+    }
+  } catch (e) {
+    err = e
+  } finally {
+    next(err)
+  }
+}
+CipherBase.prototype._flush = function (done) {
+  var err
+  try {
+    this.push(this.__final())
+  } catch (e) {
+    err = e
+  }
+
+  done(err)
+}
+CipherBase.prototype._finalOrDigest = function (outputEnc) {
+  var outData = this.__final() || Buffer.alloc(0)
+  if (outputEnc) {
+    outData = this._toString(outData, outputEnc, true)
+  }
+  return outData
+}
+
+CipherBase.prototype._toString = function (value, enc, fin) {
+  if (!this._decoder) {
+    this._decoder = new StringDecoder(enc)
+    this._encoding = enc
+  }
+
+  if (this._encoding !== enc) throw new Error('can\'t switch encodings')
+
+  var out = this._decoder.write(value)
+  if (fin) {
+    out += this._decoder.end()
+  }
+
+  return out
+}
+
+module.exports = CipherBase
+
+
+/***/ }),
+
+/***/ 482:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var inherits = __webpack_require__(717)
+var MD5 = __webpack_require__(318)
+var RIPEMD160 = __webpack_require__(785)
+var sha = __webpack_require__(72)
+var Base = __webpack_require__(27)
+
+function Hash (hash) {
+  Base.call(this, 'digest')
+
+  this._hash = hash
+}
+
+inherits(Hash, Base)
+
+Hash.prototype._update = function (data) {
+  this._hash.update(data)
+}
+
+Hash.prototype._final = function () {
+  return this._hash.digest()
+}
+
+module.exports = function createHash (alg) {
+  alg = alg.toLowerCase()
+  if (alg === 'md5') return new MD5()
+  if (alg === 'rmd160' || alg === 'ripemd160') return new RIPEMD160()
+
+  return new Hash(sha(alg))
+}
+
+
+/***/ }),
+
+/***/ 347:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4350,7 +4603,7 @@ function BufferBigIntNotDefined () {
 
 
 
-var validate = __webpack_require__(935).validate;
+var validate = __webpack_require__(586).validate;
 
 /**
  * Base32 encoding and decoding.
@@ -4421,7 +4674,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 707:
+/***/ 221:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4435,10 +4688,10 @@ module.exports = {
 
 
 
-var base32 = __webpack_require__(653);
+var base32 = __webpack_require__(347);
 var bigInt = __webpack_require__(736);
-var convertBits = __webpack_require__(249);
-var validation = __webpack_require__(935);
+var convertBits = __webpack_require__(219);
+var validation = __webpack_require__(586);
 var validate = validation.validate;
 
 /**
@@ -4510,7 +4763,7 @@ var ValidationError = validation.ValidationError;
  *
  * @private
  */
-var VALID_PREFIXES = ['bitcoincash', 'bchtest', 'bchreg'];
+var VALID_PREFIXES = ['ecash', 'bitcoincash', 'simpleledger', 'etoken', 'ectest', 'bchtest', 'bchreg'];
 
 /**
  * Checks whether a string is a valid prefix; ie., it has a single letter case
@@ -4760,7 +5013,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 249:
+/***/ 219:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4787,7 +5040,7 @@ module.exports = {
 
 
 
-var validate = __webpack_require__(935).validate;
+var validate = __webpack_require__(586).validate;
 
 /**
  * Converts an array of integers made up of 'from' bits into an
@@ -4839,7 +5092,7 @@ module.exports = function(data, from, to, strictMode) {
 
 /***/ }),
 
-/***/ 935:
+/***/ 586:
 /***/ ((module) => {
 
 "use strict";
@@ -4892,150 +5145,6 @@ module.exports = {
   ValidationError: ValidationError,
   validate: validate,
 };
-
-
-/***/ }),
-
-/***/ 27:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var Buffer = __webpack_require__(509).Buffer
-var Transform = __webpack_require__(830).Transform
-var StringDecoder = __webpack_require__(553)/* .StringDecoder */ .s
-var inherits = __webpack_require__(717)
-
-function CipherBase (hashMode) {
-  Transform.call(this)
-  this.hashMode = typeof hashMode === 'string'
-  if (this.hashMode) {
-    this[hashMode] = this._finalOrDigest
-  } else {
-    this.final = this._finalOrDigest
-  }
-  if (this._final) {
-    this.__final = this._final
-    this._final = null
-  }
-  this._decoder = null
-  this._encoding = null
-}
-inherits(CipherBase, Transform)
-
-CipherBase.prototype.update = function (data, inputEnc, outputEnc) {
-  if (typeof data === 'string') {
-    data = Buffer.from(data, inputEnc)
-  }
-
-  var outData = this._update(data)
-  if (this.hashMode) return this
-
-  if (outputEnc) {
-    outData = this._toString(outData, outputEnc)
-  }
-
-  return outData
-}
-
-CipherBase.prototype.setAutoPadding = function () {}
-CipherBase.prototype.getAuthTag = function () {
-  throw new Error('trying to get auth tag in unsupported state')
-}
-
-CipherBase.prototype.setAuthTag = function () {
-  throw new Error('trying to set auth tag in unsupported state')
-}
-
-CipherBase.prototype.setAAD = function () {
-  throw new Error('trying to set aad in unsupported state')
-}
-
-CipherBase.prototype._transform = function (data, _, next) {
-  var err
-  try {
-    if (this.hashMode) {
-      this._update(data)
-    } else {
-      this.push(this._update(data))
-    }
-  } catch (e) {
-    err = e
-  } finally {
-    next(err)
-  }
-}
-CipherBase.prototype._flush = function (done) {
-  var err
-  try {
-    this.push(this.__final())
-  } catch (e) {
-    err = e
-  }
-
-  done(err)
-}
-CipherBase.prototype._finalOrDigest = function (outputEnc) {
-  var outData = this.__final() || Buffer.alloc(0)
-  if (outputEnc) {
-    outData = this._toString(outData, outputEnc, true)
-  }
-  return outData
-}
-
-CipherBase.prototype._toString = function (value, enc, fin) {
-  if (!this._decoder) {
-    this._decoder = new StringDecoder(enc)
-    this._encoding = enc
-  }
-
-  if (this._encoding !== enc) throw new Error('can\'t switch encodings')
-
-  var out = this._decoder.write(value)
-  if (fin) {
-    out += this._decoder.end()
-  }
-
-  return out
-}
-
-module.exports = CipherBase
-
-
-/***/ }),
-
-/***/ 482:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var inherits = __webpack_require__(717)
-var MD5 = __webpack_require__(318)
-var RIPEMD160 = __webpack_require__(785)
-var sha = __webpack_require__(72)
-var Base = __webpack_require__(27)
-
-function Hash (hash) {
-  Base.call(this, 'digest')
-
-  this._hash = hash
-}
-
-inherits(Hash, Base)
-
-Hash.prototype._update = function (data) {
-  this._hash.update(data)
-}
-
-Hash.prototype._final = function () {
-  return this._hash.digest()
-}
-
-module.exports = function createHash (alg) {
-  alg = alg.toLowerCase()
-  if (alg === 'md5') return new MD5()
-  if (alg === 'rmd160' || alg === 'ripemd160') return new RIPEMD160()
-
-  return new Hash(sha(alg))
-}
 
 
 /***/ }),
@@ -10770,7 +10879,7 @@ function config (name) {
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(861);
+/******/ 	return __webpack_require__(410);
 /******/ })()
 ;
 });
